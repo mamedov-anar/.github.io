@@ -2,630 +2,1470 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Разбор натальной карты — Диана</title>
+  <title>Натальная карта Дианы — астрологический разбор</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at top, #4c6fff 0, #171834 40%, #050611 100%);
-      --accent: #ffcc66;
-      --accent-soft: rgba(255, 204, 102, 0.15);
-      --text-main: #f5f5ff;
-      --text-muted: #b7b9d6;
-      --card-bg: rgba(7, 9, 25, 0.9);
-      --border-soft: rgba(255, 255, 255, 0.12);
-      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.6);
-      --radius-xl: 24px;
-      --max-width: 1120px;
+      --bg-main: #050816;
+      --bg-section: rgba(7, 10, 40, 0.88);
+      --accent: #f6c177;
+      --accent-soft: rgba(246, 193, 119, 0.3);
+      --text-main: #f7f7ff;
+      --text-muted: #a8b2d1;
+      --border-soft: rgba(148, 163, 235, 0.25);
+      --card-radius: 24px;
+      --transition-fast: 0.35s ease;
+      --transition-slow: 0.8s ease;
+      --shadow-soft: 0 18px 45px rgba(10, 10, 40, 0.85);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      background: #050611;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.12) 0, transparent 50%),
-        radial-gradient(circle at 80% 10%, rgba(102,204,255,0.2) 0, transparent 55%),
-        radial-gradient(circle at 10% 80%, rgba(255,153,204,0.15) 0, transparent 55%),
-        var(--bg-gradient);
-      background-attachment: fixed;
-      line-height: 1.6;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
       scroll-behavior: smooth;
+      scroll-padding-top: 90px;
     }
-    body::before {
-      content: "";
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0b102a 0, #030519 40%, #020313 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* базовый звездный фон */
+    .stars,
+    .stars2,
+    .stars3 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      z-index: -4;
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.45;
+      animation: moveStars 80s linear infinite;
+    }
+
+    .stars {
+      background-image: radial-gradient(2px 2px at 20px 30px, #ffffffcc, transparent 60%),
+        radial-gradient(1px 1px at 80px 120px, #ffffff88, transparent 60%),
+        radial-gradient(1.5px 1.5px at 150px 90px, #ffffffaa, transparent 60%);
+    }
+
+    .stars2 {
+      background-image: radial-gradient(1.5px 1.5px at 60px 20px, #9be7ffbb, transparent 60%),
+        radial-gradient(2px 2px at 200px 150px, #ffd6aaff, transparent 60%),
+        radial-gradient(1px 1px at 120px 200px, #ffffffaa, transparent 60%);
+      opacity: 0.35;
+      animation-duration: 120s;
+    }
+
+    .stars3 {
+      background-image: radial-gradient(1px 1px at 40px 160px, #ffc3f9bb, transparent 60%),
+        radial-gradient(1.5px 1.5px at 180px 40px, #b3f4ffcc, transparent 60%);
+      opacity: 0.3;
+      animation-duration: 160s;
+    }
+
+    @keyframes moveStars {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(-200px, -200px, 0);
+      }
+    }
+
+    /* плавающие созвездия по экрану */
+    .floating-constellations {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image:
-        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8) 0, transparent 50%),
-        radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.8) 0, transparent 50%),
-        radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.8) 0, transparent 50%),
-        radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.8) 0, transparent 50%);
-      opacity: 0.5;
-      z-index: -1;
+      z-index: -2;
     }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
+
+    .constellation {
+      position: absolute;
+      opacity: 0.35;
+      animation: floatConstellation 36s linear infinite;
+    }
+
+    .constellation svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .constellation circle {
+      fill: #e5e7eb;
+      filter: drop-shadow(0 0 6px rgba(248, 250, 252, 0.85));
+    }
+
+    .constellation line {
+      stroke: rgba(148, 163, 235, 0.8);
+      stroke-width: 1;
+    }
+
+    .constellation-1 {
+      top: 10%;
+      left: 5%;
+      width: 160px;
+      height: 100px;
+    }
+
+    .constellation-2 {
+      top: 55%;
+      right: 6%;
+      width: 180px;
+      height: 110px;
+      animation-duration: 42s;
+    }
+
+    .constellation-3 {
+      bottom: 8%;
+      left: 18%;
+      width: 140px;
+      height: 90px;
+      animation-duration: 50s;
+    }
+
+    @keyframes floatConstellation {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(10px, -12px, 0) scale(1.06);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    /* круг зодиака под контентом */
+    .zodiac-wheel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 520px;
+      height: 520px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 235, 0.25);
+      transform: translate(-50%, -50%);
+      z-index: -3;
+      opacity: 0.18;
+      box-shadow: 0 0 45px rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(4px);
+    }
+
+    .zodiac-wheel::before,
+    .zodiac-wheel::after {
+      content: "";
+      position: absolute;
+      inset: 12%;
+      border-radius: inherit;
+      border: 1px dashed rgba(148, 163, 235, 0.25);
+    }
+
+    .zodiac-wheel::after {
+      inset: 24%;
+      border-style: solid;
+      border-color: rgba(148, 163, 235, 0.18);
+    }
+
+    .zodiac-spokes {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-image:
+        linear-gradient(0deg, transparent 49%, rgba(148, 163, 235, 0.25) 50%, transparent 51%),
+        linear-gradient(60deg, transparent 49%, rgba(148, 163, 235, 0.25) 50%, transparent 51%),
+        linear-gradient(120deg, transparent 49%, rgba(148, 163, 235, 0.25) 50%, transparent 51%);
+      opacity: 0.65;
+    }
+
+    .zodiac-wheel-rotation {
+      animation: rotateWheel 120s linear infinite;
+    }
+
+    @keyframes rotateWheel {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* переход звёздами между разделами */
+    .transition-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--transition-slow);
+      z-index: 30;
+    }
+
+    body.transitioning .transition-overlay {
+      opacity: 1;
+    }
+
+    .transition-stars-layer {
+      position: absolute;
+      inset: -20%;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, #ffffff, transparent 60%),
+        radial-gradient(3px 3px at 30% 80%, #ffd6aa, transparent 60%),
+        radial-gradient(1.5px 1.5px at 70% 30%, #b3f4ff, transparent 60%),
+        radial-gradient(2px 2px at 90% 60%, #ffc3f9, transparent 60%);
+      background-size: 320px 320px;
+      mix-blend-mode: screen;
+      opacity: 0.0;
+      animation: starBurst 1.2s ease-out infinite;
+    }
+
+    .transition-stars-layer:nth-child(2) {
+      animation-delay: 0.15s;
+      transform: scale(1.1);
+    }
+
+    .transition-stars-layer:nth-child(3) {
+      animation-delay: 0.3s;
+      transform: scale(1.2);
+    }
+
+    @keyframes starBurst {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      20% {
+        opacity: 0.90;
+        transform: scale(1.02);
+      }
+      60% {
+        opacity: 0.45;
+        transform: scale(1.15);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.2);
+      }
+    }
+
     header {
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
       backdrop-filter: blur(18px);
-      background: linear-gradient(to bottom, rgba(5, 6, 17, 0.95), rgba(5, 6, 17, 0.6));
-      border-bottom: 1px solid var(--border-soft);
+      background: linear-gradient(
+          to bottom,
+          rgba(3, 6, 32, 0.95),
+          rgba(3, 6, 32, 0.75),
+          transparent
+        );
+      border-bottom: 1px solid rgba(148, 163, 235, 0.35);
     }
-    .nav {
-      max-width: var(--max-width);
+
+    .nav-inner {
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 10px 20px;
+      padding: 14px 20px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
     }
-    .nav-logo {
+
+    .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 14px;
-      letter-spacing: 0.12em;
+      font-size: 15px;
       text-transform: uppercase;
+      letter-spacing: 0.16em;
       color: var(--text-muted);
     }
-    .nav-logo-symbol {
-      width: 32px;
-      height: 32px;
+
+    /* логотип-звезда */
+    .brand-mark {
+      width: 30px;
+      height: 30px;
       border-radius: 999px;
-      border: 1px solid var(--accent-soft);
-      display: flex;
+      position: relative;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      color: var(--accent);
-      box-shadow: 0 0 15px rgba(255, 204, 102, 0.5);
+      background: radial-gradient(circle at 30% 20%, #ffe7a9, #facc15, #4b5563);
+      box-shadow:
+        0 0 22px rgba(250, 204, 21, 0.85),
+        0 0 48px rgba(250, 204, 21, 0.55);
+      overflow: hidden;
     }
-    .nav-links {
+
+    .brand-mark::before {
+      content: "";
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle at 50% 30%, #fffaf0, #fde68a, #f59e0b);
+      /* пятиконечная звезда */
+      clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 91%,
+        50% 70%,
+        21% 91%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+      );
+      box-shadow: 0 0 18px rgba(255, 249, 219, 0.9);
+      animation: starPulse 3.6s ease-in-out infinite;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: inherit;
+      border: 1px solid rgba(254, 252, 232, 0.65);
+      opacity: 0.7;
+    }
+
+    @keyframes starPulse {
+      0% {
+        transform: scale(0.96) rotate(0deg);
+        opacity: 0.9;
+      }
+      50% {
+        transform: scale(1.05) rotate(4deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.96) rotate(0deg);
+        opacity: 0.9;
+      }
+    }
+
+    nav ul {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      font-size: 13px;
+      list-style: none;
+      justify-content: flex-end;
     }
-    .nav-links a {
-      padding: 6px 10px;
+
+    nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
       border-radius: 999px;
       border: 1px solid transparent;
+      font-size: 13px;
+      text-decoration: none;
       color: var(--text-muted);
-      transition: all 0.2s ease;
-      background: rgba(13, 14, 36, 0.8);
-    }
-    .nav-links a:hover {
-      border-color: var(--accent-soft);
-      color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(255, 204, 102, 0.18);
-    }
-    main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
-    section { margin-bottom: 48px; }
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-soft);
-      padding: 28px;
       position: relative;
       overflow: hidden;
+      background: radial-gradient(circle at top left, rgba(148, 163, 235, 0.28), transparent 55%);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
     }
-    .card::before {
+
+    nav a span.dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(246, 193, 119, 0.9);
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 18px rgba(15, 23, 42, 0.9);
+      transform: translateY(-1px);
+      background: radial-gradient(circle at top left, rgba(246, 193, 119, 0.45), transparent 55%);
+    }
+
+    .nav-toggle {
+      display: none;
+      cursor: pointer;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 235, 0.5);
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--text-main);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .nav-toggle span::before,
+    .nav-toggle span::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 2px;
+      background: var(--text-main);
+      border-radius: 999px;
+      left: 0;
+    }
+
+    .nav-toggle span::before {
+      top: -5px;
+    }
+
+    .nav-toggle span::after {
+      bottom: -5px;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 20px 72px;
+    }
+
+    section {
+      margin: 42px 0;
+      position: relative;
+    }
+
+    /* разделители-созвездия между секциями */
+    .section-divider {
+      position: relative;
+      height: 52px;
+      margin: 10px auto 4px;
+      max-width: 520px;
+      opacity: 0.65;
+    }
+
+    .section-divider svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .section-divider circle {
+      fill: #e5e7eb;
+      filter: drop-shadow(0 0 5px rgba(248, 250, 252, 0.85));
+    }
+
+    .section-divider line {
+      stroke: rgba(148, 163, 235, 0.85);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+
+    .section-inner {
+      position: relative;
+      background: var(--bg-section);
+      border-radius: var(--card-radius);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 28px 26px 26px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .section-inner::before {
       content: "";
       position: absolute;
       inset: -40%;
-      opacity: 0.25;
-      background:
-        radial-gradient(circle at 20% 0, rgba(255, 204, 102, 0.15) 0, transparent 55%),
-        radial-gradient(circle at 80% 100%, rgba(102, 204, 255, 0.2) 0, transparent 55%);
-      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(248, 250, 252, 0.22), transparent 60%),
+        radial-gradient(circle at 70% 10%, rgba(254, 202, 202, 0.22), transparent 55%),
+        radial-gradient(circle at 90% 80%, rgba(191, 219, 254, 0.22), transparent 55%);
+      mix-blend-mode: screen;
       z-index: -1;
     }
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 16px;
-    }
-    .card-title {
-      font-size: 22px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .card-subtitle {
-      font-size: 13px;
-      color: var(--accent);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-    .card-divider {
-      border: none;
-      border-top: 1px solid var(--border-soft);
-      margin: 14px 0 18px;
-    }
-    .card-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      gap: 28px;
-      align-items: center;
-    }
-    .card-layout.reverse {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--accent-soft);
-      background: rgba(5, 6, 17, 0.85);
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-    .pill span {
-      color: var(--accent);
-      font-size: 14px;
-    }
-    h1 { font-size: 34px; line-height: 1.1; margin-bottom: 10px; }
-    h2 { font-size: 24px; margin-bottom: 10px; }
-    p { font-size: 15px; color: var(--text-muted); }
-    ul { list-style: none; margin-top: 8px; }
-    li {
-      position: relative;
-      padding-left: 18px;
-      margin: 4px 0;
-      font-size: 15px;
-      color: var(--text-muted);
-    }
-    li::before {
-      content: "✦";
-      position: absolute;
-      left: 0;
-      top: 2px;
-      font-size: 10px;
-      color: var(--accent);
-    }
-    .astro-tagline {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .hero-image {
-      position: relative;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
-      isolation: isolate;
-    }
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .hero-image::after {
+
+    .section-inner::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 80% 0, rgba(0, 0, 0, 0) 0, rgba(5, 6, 17, 0.7) 70%);
-      mix-blend-mode: soft-light;
+      border-radius: inherit;
+      border: 1px solid rgba(148, 163, 235, 0.18);
+      opacity: 0.65;
+      pointer-events: none;
     }
-    .hero-footer {
-      margin-top: 16px;
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 12px rgba(246, 193, 119, 0.85);
+    }
+
+    h1,
+    h2 {
+      font-weight: 650;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(26px, 3.1vw, 32px);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(22px, 2.4vw, 26px);
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 720px;
+    }
+
+    p {
+      font-size: 15px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin: 8px 0 4px;
+      padding-left: 0;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .bullet-list li::before {
+      content: "✶";
+      position: absolute;
+      left: 0;
+      top: 1px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      border: 1px dashed rgba(148, 163, 235, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       font-size: 13px;
+      color: var(--text-muted);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.96));
+      box-shadow: inset 0 0 28px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-placeholder span {
+      max-width: 80%;
+    }
+
+    .photo-placeholder::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 140%;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(248, 250, 252, 0.8), transparent 60%),
+        radial-gradient(1px 1px at 80% 40%, rgba(248, 250, 252, 0.6), transparent 60%),
+        radial-gradient(1px 1px at 30% 70%, rgba(248, 250, 252, 0.6), transparent 60%);
+      opacity: 0.25;
+      mix-blend-mode: screen;
+      animation: slowDrift 40s linear infinite;
+    }
+
+    @keyframes slowDrift {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(-80px, -80px, 0);
+      }
+    }
+
+    .tagline {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent-soft);
+      margin-bottom: 4px;
+    }
+
+    .quote-block {
+      margin: 12px 0 14px;
+      padding: 14px 14px 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(246, 193, 119, 0.4);
+      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.08), transparent 55%),
+        rgba(15, 23, 42, 0.82);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-block::before {
+      content: "✦";
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      font-size: 16px;
+      color: rgba(246, 193, 119, 0.85);
+      text-shadow: 0 0 16px rgba(248, 250, 252, 0.7);
+    }
+
+    .quote-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .quote-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 235, 0.5);
+      background: rgba(15, 23, 42, 0.85);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    .pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(246, 193, 119, 0.85);
+    }
+
+    .section-emphasis {
+      border: 1px solid rgba(246, 193, 119, 0.6);
+      box-shadow: 0 0 24px rgba(248, 250, 252, 0.12), 0 24px 50px rgba(15, 23, 42, 0.95);
+    }
+
+    .section-emphasis::after {
+      border-color: rgba(246, 193, 119, 0.45);
+    }
+
+    .section-emphasis .section-label {
+      color: #fbbf24;
+    }
+
+    .section-emphasis .section-label::before {
+      border-color: #fbbf24;
+    }
+
+    .two-column-text {
+      columns: 2;
+      column-gap: 28px;
+    }
+
+    .two-column-text p,
+    .two-column-text ul {
+      break-inside: avoid;
+    }
+
+    .highlight-block {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px dashed rgba(246, 193, 119, 0.6);
+      font-size: 14px;
+    }
+
+    .highlight-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .credits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    .credits strong {
+      font-weight: 600;
+    }
+
+    .credits a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(246, 193, 119, 0.6);
+      padding-bottom: 1px;
+    }
+
+    .credits a:hover {
+      opacity: 0.85;
+    }
+
+    .contact-block {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .contact-value {
+      font-size: 14px;
+    }
+
+    .mini-constellation {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      width: 120px;
+      height: 80px;
+      opacity: 0.55;
+    }
+
+    .mini-constellation svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mini-constellation circle {
+      fill: #e5e7eb;
+    }
+
+    .mini-constellation line {
+      stroke: rgba(148, 163, 235, 0.7);
+      stroke-width: 1;
+    }
+
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px 32px;
+      font-size: 11px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 16px;
     }
-    .hero-footer strong { color: var(--accent); }
-    .chart-wrapper {
-      position: relative;
-      border-radius: 20px;
-      padding: 18px;
-      background: radial-gradient(circle at 0 0, rgba(102, 204, 255, 0.15) 0, rgba(5, 6, 17, 0.9) 45%);
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+
+    footer span {
+      opacity: 0.7;
     }
-    .chart-wrapper::before {
-      content: "Natal Chart";
-      position: absolute;
-      top: 12px;
-      right: 18px;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(183, 185, 214, 0.7);
-    }
-    .chart-columns {
-      display: grid;
-      grid-template-columns: 80px minmax(0, 1fr) 80px;
-      gap: 12px;
-      align-items: center;
-    }
-    .mini-card {
+
+    footer .footer-stars {
+      display: inline-flex;
+      gap: 4px;
       font-size: 12px;
-      color: var(--text-muted);
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px dashed var(--accent-soft);
-      background: rgba(8, 8, 24, 0.9);
     }
-    .mini-card-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .section-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-    .two-columns {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 24px;
-    }
-    .quote {
-      font-size: 14px;
-      font-style: italic;
-      color: var(--accent);
-      border-left: 2px solid var(--accent-soft);
-      padding-left: 12px;
-      margin-bottom: 10px;
-    }
-    .footer {
-      font-size: 13px;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: 40px;
-    }
-    .footer strong { color: var(--accent); }
-    .footer a {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      color: var(--accent);
-    }
-    @media (max-width: 900px) {
-      .card-layout,
-      .card-layout.reverse,
-      .chart-columns,
-      .two-columns {
+
+    @media (max-width: 880px) {
+      .grid-2 {
         grid-template-columns: minmax(0, 1fr);
       }
-      .chart-columns { gap: 18px; }
-      .card { padding: 22px; }
-      h1 { font-size: 28px; }
-      .card-title { font-size: 18px; }
+
+      .two-column-text {
+        columns: 1;
+      }
+
+      html {
+        scroll-padding-top: 78px;
+      }
+
+      .zodiac-wheel {
+        width: 360px;
+        height: 360px;
+      }
+
+      .constellation-1 {
+        width: 120px;
+        height: 80px;
+      }
+      .constellation-2 {
+        width: 130px;
+        height: 90px;
+      }
+      .constellation-3 {
+        width: 110px;
+        height: 70px;
+      }
     }
-    @media (max-width: 600px) {
-      main { padding-inline: 14px; }
-      header .nav { padding-inline: 14px; }
-      .nav-links { display: none; }
+
+    @media (max-width: 720px) {
+      .nav-inner {
+        padding-inline: 14px;
+      }
+
+      nav {
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        z-index: 18;
+        transform: translateY(-6px);
+      }
+
+      nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.97), rgba(3, 7, 18, 0.97));
+        border-bottom: 1px solid rgba(148, 163, 235, 0.4);
+        border-top: 1px solid rgba(148, 163, 235, 0.35);
+        padding: 8px 10px 10px;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform-origin: top;
+        transition: max-height 0.35s ease, opacity 0.35s ease;
+      }
+
+      nav.open ul {
+        max-height: 320px;
+        opacity: 1;
+      }
+
+      nav a {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 8px 10px;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      main {
+        padding-inline: 16px;
+        padding-top: 16px;
+      }
+
+      section {
+        margin: 32px 0;
+      }
+
+      .section-inner {
+        padding: 22px 18px 20px;
+      }
+
+      .mini-constellation {
+        opacity: 0.4;
+        width: 90px;
+        bottom: 10px;
+      }
+
+      .section-divider {
+        max-width: 380px;
+        height: 42px;
+      }
     }
   </style>
 </head>
 <body>
-<header>
-  <div class="nav">
-    <div class="nav-logo">
-      <div class="nav-logo-symbol">☉</div>
-      <div>Разбор натальной карты</div>
-    </div>
-    <nav class="nav-links">
-      <a href="#hero">Введение</a>
-      <a href="#chart">Натальная карта</a>
-      <a href="#personality">Личность</a>
-      <a href="#ascendant">Асцендент</a>
-      <a href="#sun-scorpio">Солнце</a>
-      <a href="#cross">Ресурсы</a>
-      <a href="#shadow">Тени</a>
-    </nav>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <div class="zodiac-wheel zodiac-wheel-rotation">
+    <div class="zodiac-spokes"></div>
   </div>
-</header>
 
-<main>
-  <section id="hero">
-    <div class="card">
-      <div class="card-layout">
-        <div>
-          <div class="astro-tagline">Личный астрологический разбор</div>
-          <h1>Натальная карта Дианы</h1>
-          <p>
-            Индивидуальный анализ сильных сторон, внутренних ресурсов и точек роста через принципы
-            классической астрологии. Эта страница собирает воедино главное из натального отчёта и
-            оформляет его в образ вселенной, где каждая планета — часть твоей личной истории.
-          </p>
-          <hr class="card-divider" />
-          <ul>
-            <li>Общая картина личности и жизненных задач.</li>
-            <li>Ключевые положения карты: асцендент, Солнце, крест ресурсов.</li>
-            <li>Проблемные стороны и практические рекомендации.</li>
-          </ul>
-          <div class="hero-footer">
-            <span>Автор разбора: <strong>Максим Серебряков</strong></span>
-            <span>Instagram: <strong>@astro_serebryakov</strong></span>
-          </div>
-        </div>
-        <div class="hero-image">
-          <img src="img/page1.jpg" alt="Закат и силуэты птиц — обложка натальной карты" />
-        </div>
-      </div>
+  <div class="floating-constellations">
+    <div class="constellation constellation-1">
+      <svg viewBox="0 0 160 100">
+        <circle cx="18" cy="70" r="2" />
+        <circle cx="45" cy="40" r="2" />
+        <circle cx="80" cy="25" r="2" />
+        <circle cx="120" cy="40" r="2" />
+        <circle cx="145" cy="15" r="2" />
+        <line x1="18" y1="70" x2="45" y2="40" />
+        <line x1="45" y1="40" x2="80" y2="25" />
+        <line x1="80" y1="25" x2="120" y2="40" />
+        <line x1="120" y1="40" x2="145" y2="15" />
+      </svg>
     </div>
-  </section>
+    <div class="constellation constellation-2">
+      <svg viewBox="0 0 180 110">
+        <circle cx="20" cy="25" r="2" />
+        <circle cx="55" cy="50" r="2" />
+        <circle cx="90" cy="35" r="2" />
+        <circle cx="130" cy="55" r="2" />
+        <circle cx="160" cy="80" r="2" />
+        <line x1="20" y1="25" x2="55" y2="50" />
+        <line x1="55" y1="50" x2="90" y2="35" />
+        <line x1="90" y1="35" x2="130" y2="55" />
+        <line x1="130" y1="55" x2="160" y2="80" />
+      </svg>
+    </div>
+    <div class="constellation constellation-3">
+      <svg viewBox="0 0 140 90">
+        <circle cx="15" cy="50" r="2" />
+        <circle cx="40" cy="30" r="2" />
+        <circle cx="70" cy="45" r="2" />
+        <circle cx="100" cy="25" r="2" />
+        <circle cx="125" cy="60" r="2" />
+        <line x1="15" y1="50" x2="40" y2="30" />
+        <line x1="40" y1="30" x2="70" y2="45" />
+        <line x1="70" y1="45" x2="100" y2="25" />
+        <line x1="70" y1="45" x2="125" y2="60" />
+      </svg>
+    </div>
+  </div>
 
-  <section id="chart">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Карта рождения</div>
-          <div class="card-title">Натальная карта</div>
-        </div>
-        <div class="section-label">структура личности в знаках и домах</div>
+  <div class="transition-overlay">
+    <div class="transition-stars-layer"></div>
+    <div class="transition-stars-layer"></div>
+    <div class="transition-stars-layer"></div>
+  </div>
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>Натальная карта Дианы</div>
       </div>
-      <div class="chart-wrapper">
-        <div class="chart-columns">
+      <button class="nav-toggle" aria-label="Открыть меню">
+        <span></span>
+      </button>
+      <nav>
+        <ul>
+          <li><a href="#intro"><span class="dot"></span><span>Разбор карты</span></a></li>
+          <li><a href="#personality"><span class="dot"></span><span>Описание личности</span></a></li>
+          <li><a href="#sun-scorpio"><span class="dot"></span><span>Солнце в Скорпионе</span></a></li>
+          <li><a href="#cross"><span class="dot"></span><span>Крест ресурсов</span></a></li>
+          <li><a href="#issues"><span class="dot"></span><span>Проблемные стороны</span></a></li>
+          <li><a href="#credits"><span class="dot"></span><span>Автор и контакты</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Лист 1: Разбор натальной карты -->
+    <section id="intro">
+      <div class="section-inner">
+        <div class="section-label">Лист 1</div>
+        <h1>Разбор натальной карты Дианы</h1>
+        <p class="section-subtitle">
+          Индивидуальный анализ сильных сторон, внутренних ресурсов и точек роста через принципы классической астрологии. 
+          Эта страница собирает главное из натального отчёта и оформляет его в образ вселенной, где каждая планета — часть твоей личной истории.
+        </p>
+
+        <div class="grid-2">
           <div>
-            <img src="img/page2-left.jpg" alt="Таро / символическая карта слева" />
-          </div>
-          <div>
-            <img src="img/page2-center.jpg" alt="Круг натальной карты с аспектами" />
-          </div>
-          <div>
-            <img src="img/page2-right.jpg" alt="Таро / символическая карта справа" />
-          </div>
-        </div>
-      </div>
-      <hr class="card-divider" />
-      <div class="two-columns">
-        <div>
-          <p>
-            Натальная карта показывает расположение планет в момент рождения. Связи между ними, а также
-            знаки и дома, в которых они стоят, описывают сценарии твоей жизни: как ты проявляешь себя,
-            что даёт ощущение силы, какие темы требуют зрелости и внимания.
-          </p>
-        </div>
-        <div>
-          <ul>
-            <li>Асцендент задаёт стиль проявления личности и первый образ для мира.</li>
-            <li>Солнце описывает ядро характера и направление жизненной воли.</li>
-            <li>Крест ресурсов показывает, как ты формируешь стабильность и силу.</li>
-            <li>Напряжённые аспекты указывают на точки роста и внутренние конфликты.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+            <div class="tagline">Структура разбора</div>
+            <ul class="bullet-list">
+              <li>Общая картина личности и жизненных задач.</li>
+              <li>Ключевые положения карты: асцендент, Солнце, крест ресурсов.</li>
+              <li>Потенциально проблемные стороны и практические рекомендации.</li>
+            </ul>
 
-  <section id="personality">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Ядро характера</div>
-          <div class="card-title">Описание личности</div>
-        </div>
-        <div class="section-label">как тебя видит мир и ты сама</div>
-      </div>
-
-      <div class="card-layout reverse">
-        <div>
-          <div class="pill"><span>☉</span> Солнечная, яркая и заметная энергия</div>
-          <p>
-            Твоё присутствие трудно не заметить: в тебе много внутреннего огня, стремления к развитию и
-            естественного лидерства. Ты способна вдохновлять других собственным примером, но при этом
-            нуждаешься в глубоких и честных чувствах, в людях, которым можно доверять без масок.
-          </p>
-          <hr class="card-divider" />
-          <ul>
-            <li>Сильное чувство достоинства и потребность быть лучшей версией себя.</li>
-            <li>Стремление к контролю над своей жизнью и выбором окружения.</li>
-            <li>Важность признания, но при этом высокая требовательность к себе.</li>
-            <li>Интуитивное понимание людей и тонкое ощущение их настроения.</li>
-          </ul>
-        </div>
-        <div class="hero-image">
-          <img src="img/page3.jpg" alt="Силуэт птицы на фоне заката — символ личности" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="ascendant">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Асцендент во Льве</div>
-          <div class="card-title">«Будь самой собой — другие роли заняты»</div>
-        </div>
-        <div class="section-label">первая реакция и стиль проявления</div>
-      </div>
-
-      <div class="card-layout">
-        <div class="hero-image">
-          <img src="img/page4.jpg" alt="Диана на фоне города — образ асцендента во Льве" />
-        </div>
-        <div>
-          <div class="quote">
-            Вектор направления: если иметь — то лучшее. Если быть — то первой.
-          </div>
-          <p>
-            Асцендент во Льве делает тебя яркой, заметной и харизматичной. Люди считывают уверенность,
-            даже если внутри ты можешь переживать или сомневаться. Ты создаёшь вокруг себя атмосферу
-            праздника и вдохновения, и этим естественным образом притягиваешь внимание.
-          </p>
-          <hr class="card-divider" />
-          <ul>
-            <li>Внутренняя щедрость и готовность поддерживать тех, кого любишь.</li>
-            <li>Не терпишь полумер — если вложилась, то до конца.</li>
-            <li>Сильная потребность в признании своих усилий и уникальности.</li>
-            <li>Твой свет зажигается, когда ты занимаешь «своё» место и не играешь чужие роли.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="sun-scorpio">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Управитель гороскопа</div>
-          <div class="card-title">Солнце в Скорпионе</div>
-        </div>
-        <div class="section-label">глубина, сила и трансформация</div>
-      </div>
-
-      <div class="card-layout reverse">
-        <div>
-          <div class="quote">
-            Девиз: «Что нас не убивает — делает сильнее».
-          </div>
-          <p>
-            Солнце в Скорпионе даёт глубину, проницательность и почти магнетическое влияние.
-            Ты не из тех, кто живёт на поверхности событий — важно докопаться до сути, понять
-            мотивы, увидеть правду, какой бы сложной она ни была. Для тебя сила — это честность
-            с собой и способность подниматься после любого кризиса.
-          </p>
-          <hr class="card-divider" />
-          <ul>
-            <li>Сильная интуиция и умение считывать скрытые мотивы людей.</li>
-            <li>Потребность в эмоциях «по-настоящему», без фальши и игры.</li>
-            <li>Способность собирать себя заново после сложных периодов.</li>
-            <li>Интерес к психологии, глубинным темам и личной трансформации.</li>
-          </ul>
-        </div>
-        <div class="hero-image">
-          <img src="img/page5.jpg" alt="Диана в интерьере — символ Солнца в Скорпионе" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="cross">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Выражен крест «ресурсов и силы»</div>
-          <div class="card-title">Стабильность и внутренняя опора</div>
-        </div>
-        <div class="section-label">как ты формируешь устойчивость</div>
-      </div>
-
-      <div class="card-layout">
-        <div class="hero-image">
-          <img src="img/page6.jpg" alt="Диана в светлом пространстве — крест ресурсов" />
-        </div>
-        <div>
-          <p>
-            Выраженный крест ресурсов говорит о том, что тебе важно ощущать опору под ногами —
-            как в материальной, так и в эмоциональной сфере. Ты умеешь концентрироваться на целях
-            и идти к ним с упорством, особенно если видишь в этом долгосрочный смысл.
-          </p>
-          <hr class="card-divider" />
-          <div class="two-columns">
-            <div>
-              <h3 style="font-size:16px;margin-bottom:6px;">Что даёт тебе силу</h3>
-              <ul>
-                <li>Понимание, ради чего ты работаешь и куда ведёт твой путь.</li>
-                <li>Ощущение надёжных людей рядом, на которых можно опереться.</li>
-                <li>Системность, режим и собственные правила жизни.</li>
-              </ul>
+            <div class="highlight-block">
+              <div class="highlight-title">Назначение этой карты</div>
+              <p>
+                Этот разбор помогает увидеть свою жизнь как систему взаимосвязанных смыслов: где твоя сила, где точки роста,
+                какие ресурсы уже даны и куда направлен твой вектор развития.
+              </p>
             </div>
-            <div>
-              <h3 style="font-size:16px;margin-bottom:6px;">Что важно учитывать</h3>
-              <ul>
-                <li>Резкие перемены могут вызывать стресс и сопротивление.</li>
-                <li>Иногда полезно позволить себе гибкость и эксперимент.</li>
-                <li>Твоя устойчивость усиливается, когда ты сама выбираешь направление изменений.</li>
-              </ul>
+
+            <div class="credits">
+              <span>Автор разбора:&nbsp;<strong>Максим Серебряков</strong></span>
+              <span class="muted">Instagram:&nbsp;</span>
+              <a href="https://instagram.com/astro_serebryakov" target="_blank" rel="noopener noreferrer">@astro_serebryakov</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для квадратного изображения натальной карты Дианы</span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="shadow">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-subtitle">Проблемные стороны личности</div>
-          <div class="card-title">На что обратить внимание</div>
+        <div class="mini-constellation" aria-hidden="true">
+          <svg viewBox="0 0 120 80">
+            <circle cx="15" cy="35" r="2" />
+            <circle cx="40" cy="20" r="2" />
+            <circle cx="65" cy="30" r="2" />
+            <circle cx="90" cy="18" r="2" />
+            <circle cx="105" cy="50" r="2" />
+            <line x1="15" y1="35" x2="40" y2="20" />
+            <line x1="40" y1="20" x2="65" y2="30" />
+            <line x1="65" y1="30" x2="90" y2="18" />
+            <line x1="65" y1="30" x2="105" y2="50" />
+          </svg>
         </div>
-        <div class="section-label">тени, страхи и пути их проработки</div>
       </div>
+    </section>
 
-      <div class="card-layout reverse">
-        <div>
-          <div class="pill"><span>☾</span> Точки роста и внутренние страхи</div>
+    <div class="section-divider" aria-hidden="true">
+      <svg viewBox="0 0 520 52">
+        <circle cx="40" cy="30" r="2" />
+        <circle cx="140" cy="18" r="2" />
+        <circle cx="260" cy="32" r="2.4" />
+        <circle cx="380" cy="22" r="2" />
+        <circle cx="480" cy="34" r="2" />
+        <line x1="40" y1="30" x2="140" y2="18" />
+        <line x1="140" y1="18" x2="260" y2="32" />
+        <line x1="260" y1="32" x2="380" y2="22" />
+        <line x1="380" y1="22" x2="480" y2="34" />
+      </svg>
+    </div>
+
+    <!-- Лист 2: Описание личности -->
+    <section id="personality">
+      <div class="section-inner section-emphasis">
+        <div class="section-label">Лист 2</div>
+        <h2>Описание личности — асцендент во Льве</h2>
+
+        <div class="grid-2">
+          <div>
+            <div class="quote-block">
+              <div class="quote-label">Девиз</div>
+              <div class="quote-text">Будь сама собой, другие роли заняты!</div>
+            </div>
+
+            <p><strong>Вектор направления:</strong></p>
+            <p>Если иметь — то иметь лучшее. Если быть — то быть первой.</p>
+
+            <div class="tagline">Твой характер</div>
+            <ul class="bullet-list">
+              <li>Ты яркая, страстная и несомненно харизматичная личность.</li>
+              <li>Ты обладаешь огромной внутренней силой и выдержкой, которые позволяют тебе идти вперёд, несмотря ни на что.</li>
+              <li>Ты — боец по натуре: готова бороться за себя, за своих любимых, за свои проекты, вкладывая всю свою страсть и энергию в защиту того, что тебе дорого.</li>
+              <li>Твоя преданность тем, кого ты любишь, не знает границ. Поэтому ты испытываешь истинное удовольствие, когда видишь признание и восхищение за свои поступки со стороны людей.</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для квадратной фотографии, отражающей образ личности с асцендентом во Льве</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-constellation" aria-hidden="true">
+          <svg viewBox="0 0 120 80">
+            <circle cx="20" cy="60" r="2" />
+            <circle cx="40" cy="35" r="2" />
+            <circle cx="70" cy="25" r="2" />
+            <circle cx="95" cy="40" r="2" />
+            <line x1="20" y1="60" x2="40" y2="35" />
+            <line x1="40" y1="35" x2="70" y2="25" />
+            <line x1="70" y1="25" x2="95" y2="40" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <svg viewBox="0 0 520 52">
+        <circle cx="60" cy="24" r="2" />
+        <circle cx="190" cy="34" r="2" />
+        <circle cx="260" cy="18" r="2.4" />
+        <circle cx="330" cy="36" r="2" />
+        <circle cx="450" cy="26" r="2" />
+        <line x1="60" y1="24" x2="190" y2="34" />
+        <line x1="190" y1="34" x2="260" y2="18" />
+        <line x1="260" y1="18" x2="330" y2="36" />
+        <line x1="330" y1="36" x2="450" y2="26" />
+      </svg>
+    </div>
+
+    <!-- Лист 3: Управитель гороскопа — Солнце в Скорпионе -->
+    <section id="sun-scorpio">
+      <div class="section-inner">
+        <div class="section-label">Лист 3</div>
+        <h2>Управитель гороскопа — Солнце в Скорпионе</h2>
+
+        <div class="grid-2">
+          <div>
+            <div class="quote-block">
+              <div class="quote-label">Девиз</div>
+              <div class="quote-text">Что нас не убивает, делает сильнее!</div>
+            </div>
+
+            <div class="two-column-text">
+              <p>
+                Ты — таинственная, глубокая и проницательная личность, обладающая особой, почти магнетической силой.
+                Твоя сдержанность лишь подчёркивает внутреннюю глубину, а скрытность создаёт вокруг тебя ауру загадочности.
+              </p>
+              <p>
+                Даже при сильных внутренних переживаниях ты сохраняешь внешнее спокойствие, демонстрируя удивительное самообладание.
+              </p>
+              <p>
+                В тебе заложен дар наблюдателя, мощная интуиция и способности к внушению, которые позволяют тебе проникать в суть вещей
+                и влиять на окружающих.
+              </p>
+              <p>
+                Твоя жизнь насыщена изменениями, трансформациями и переломными моментами. Ты действуешь стратегически, продуманно,
+                обезоруживающе, умея выжидать идеальный момент.
+              </p>
+              <p>
+                В кризисных ситуациях могут проявляться твои теневые стороны: ты можешь испытывать недовольство реальностью,
+                становиться замкнутой, подозрительной или даже погружаться в депрессивные состояния.
+              </p>
+              <p>
+                Тебе может быть сложно жить в спокойных, размеренных условиях, ведь ты словно «играешь с огнём», проверяя границы дозволенного.
+              </p>
+              <p>
+                Важно научиться направлять свою мощную энергию эффективно, ценить свою внутреннюю силу и использовать её для созидания,
+                а не для разрушения.
+              </p>
+              <p>
+                Помни: твоя жизнь — это творение, и ты — главный творец собственной судьбы.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для квадратной фотографии, символизирующей энергию Солнца в Скорпионе</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <svg viewBox="0 0 520 52">
+        <circle cx="30" cy="26" r="2" />
+        <circle cx="120" cy="20" r="2" />
+        <circle cx="230" cy="30" r="2.4" />
+        <circle cx="340" cy="20" r="2" />
+        <circle cx="490" cy="32" r="2" />
+        <line x1="30" y1="26" x2="120" y2="20" />
+        <line x1="120" y1="20" x2="230" y2="30" />
+        <line x1="230" y1="30" x2="340" y2="20" />
+        <line x1="340" y1="20" x2="490" y2="32" />
+      </svg>
+    </div>
+
+    <!-- Лист 4: Выражен крест «ресурсов и силы» -->
+    <section id="cross">
+      <div class="section-inner">
+        <div class="section-label">Лист 4</div>
+        <h2>Выражен крест «ресурсов и силы»</h2>
+
+        <div class="grid-2">
+          <div>
+            <p>
+              Это даёт тебе стойкость, упорство и способность доводить начатое до конца, несмотря ни на какие преграды.
+              Ты умеешь концентрироваться на цели и двигаться к ней с невероятной силой и настойчивостью.
+            </p>
+            <p>
+              Ты ценишь то, чего достигла, и прилагаешь усилия для сохранения этого. Для тебя важно чувствовать себя уверенно и защищённо,
+              имея прочный фундамент под ногами.
+            </p>
+            <p>
+              Ты естественным образом стремишься к стабильности — как в материальном, так и в эмоциональном плане.
+              Ты скорее выбираешь проверенные пути и устоявшийся порядок.
+            </p>
+            <p>
+              Ты — человек, на которого можно положиться, который ценит надёжность и устойчивость во всём.
+            </p>
+            <p>
+              Резкие изменения и неожиданные перемены могут вызывать у тебя дискомфорт или даже сопротивление.
+              Тебе нужно время, чтобы адаптироваться к новым условиям, и ты высоко ценишь предсказуемость.
+            </p>
+
+            <div class="highlight-block">
+              <div class="highlight-title">Ресурсы этого креста</div>
+              <p>
+                Крест «ресурсов и силы» показывает, где ты можешь опираться на устойчивую внутреннюю опору,
+                выстраивать долгосрочные проекты и создавать вокруг себя пространство надёжности и опоры — для себя и для других.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для квадратной фотографии, отражающей тему устойчивости, ресурсов и силы</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <svg viewBox="0 0 520 52">
+        <circle cx="50" cy="30" r="2" />
+        <circle cx="150" cy="18" r="2" />
+        <circle cx="260" cy="26" r="2.4" />
+        <circle cx="370" cy="18" r="2" />
+        <circle cx="470" cy="30" r="2" />
+        <line x1="50" y1="30" x2="150" y2="18" />
+        <line x1="150" y1="18" x2="260" y2="26" />
+        <line x1="260" y1="26" x2="370" y2="18" />
+        <line x1="370" y1="18" x2="470" y2="30" />
+      </svg>
+    </div>
+
+    <!-- Лист 5: Проблемные стороны личности -->
+    <section id="issues">
+      <div class="section-inner section-emphasis">
+        <div class="section-label">Лист 5</div>
+        <h2>Проблемные стороны личности — на что обратить внимание</h2>
+
+        <div class="grid-2">
+          <div>
+            <div class="tagline">Глубинные страхи</div>
+            <p>
+              Ты можешь испытывать глубокий страх быть изгнанной, униженной или отвергнутой. Подобный страх может подталкивать тебя к тому,
+              чтобы любой ценой сохранять свой авторитет в глазах окружающих.
+            </p>
+            <p>
+              Возможно, ты опасаешься потерять своё положение, стать объектом сплетен или потерять уважение тех, кто для тебя важен.
+              Этот страх может влиять на твои решения, заставляя избегать рисков, которые кажутся угрожающими.
+            </p>
+
+            <div class="tagline">Рекомендации для тебя</div>
+            <p>
+              Твоя истинная сила исходит не из внешних оценок, а изнутри. Помни, что твоя ценность не зависит от мнения других.
+            </p>
+            <p>
+              Развивай самоценность и уверенность в себе, опираясь на свои достижения и внутренние качества, а не на одобрение извне.
+            </p>
+            <p><strong>Позволь себе быть уязвимой.</strong></p>
+            <p>
+              Открытость и искренность, даже если они кажутся рискованными, часто ведут к более глубоким и подлинным связям.
+              Люди ценят не идеальность, а искренность.
+            </p>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для квадратной фотографии, связанной с темой внутреннего роста и принятия себя</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px;">
           <p>
-            Важная часть карты связана с темой страха быть отвергнутой, непонятой или униженной.
-            Из-за этого может появляться стремление казаться сильной, контролирующей всё, не
-            показывать уязвимость. На практике это истощает и мешает принимать поддержку.
+            Ищи общения с теми, кто уже добился успеха в своей сфере, кто обладает талантом, мудростью и опытом.
+            Взаимодействие с такими людьми будет стимулировать твой рост, расширять знания и открывать новые перспективы.
           </p>
-          <hr class="card-divider" />
-          <h3 style="font-size:16px;margin-bottom:6px;">Рекомендации</h3>
-          <ul>
-            <li>Учиться делегировать и просить о помощи, не воспринимая это как слабость.</li>
-            <li>Отделять реальную критику от собственных внутренних требований к себе.</li>
-            <li>Выбирать окружение, где ценят твою глубину, а не только внешнюю силу.</li>
-            <li>Развивать практики, которые помогают заземляться: тело, ритуалы, режим.</li>
-            <li>Помнить, что твой свет проявляется ярче, когда ты позволяешь себе быть живой, а не идеальной.</li>
-          </ul>
-        </div>
-        <div class="hero-image">
-          <img src="img/page8.jpg" alt="Диана в неоновом свете — работа с тенями" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="thanks">
-    <div class="card">
-      <div class="card-layout">
-        <div>
-          <div class="astro-tagline">Завершение разбора</div>
-          <h2>Спасибо за путешествие по своей карте</h2>
           <p>
-            Натальная карта — не приговор и не жёсткий сценарий, а подробная карта возможностей.
-            Чем внимательнее ты относишься к своим сильным сторонам и теням, тем свободнее выбираешь
-            путь. При желании этот разбор можно дополнить прогностикой, совместимостью и разбором
-            конкретных жизненных вопросов.
+            Учись у них, перенимай их стратегии и черпай вдохновение. Окружение себя людьми, которые кажутся тебе «слабыми» или «бездарными»
+            лишь для того, чтобы тешить собственное эго или чувствовать себя выше, не принесёт истинного развития.
           </p>
-          <hr class="card-divider" />
-          <p style="font-size:14px;">
-            Автор: <strong>Максим Серебряков</strong><br />
-            Instagram: <a href="https://instagram.com/astro_serebryakov" target="_blank">@astro_serebryakov</a>
+          <p>
+            Такая среда может создать иллюзию собственной исключительности, но на самом деле будет тормозить твой прогресс.
           </p>
+          <p>
+            Зная об этом, ты можешь трансформировать теневые стороны. Будь открыта к новому, учись гибкости и доверяй своей внутренней мудрости,
+            а не только внешним оценкам.
+          </p>
+          <p>
+            Твой путь — это путь к полной реализации потенциала, к гармонии и к тому, чтобы твой свет сиял ещё ярче.
+          </p>
+          <p><span class="muted">Спасибо.</span></p>
         </div>
-        <div class="hero-image">
-          <img src="img/page9.jpg" alt="Рассвет над полем — благодарность и новый цикл" />
+
+        <div class="mini-constellation" aria-hidden="true">
+          <svg viewBox="0 0 120 80">
+            <circle cx="18" cy="20" r="2" />
+            <circle cx="35" cy="45" r="2" />
+            <circle cx="60" cy="30" r="2" />
+            <circle cx="85" cy="55" r="2" />
+            <circle cx="100" cy="25" r="2" />
+            <line x1="18" y1="20" x2="35" y2="45" />
+            <line x1="35" y1="45" x2="60" y2="30" />
+            <line x1="60" y1="30" x2="85" y2="55" />
+            <line x1="60" y1="30" x2="100" y2="25" />
+          </svg>
         </div>
       </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <svg viewBox="0 0 520 52">
+        <circle cx="70" cy="22" r="2" />
+        <circle cx="200" cy="30" r="2" />
+        <circle cx="260" cy="18" r="2.4" />
+        <circle cx="320" cy="32" r="2" />
+        <circle cx="440" cy="24" r="2" />
+        <line x1="70" y1="22" x2="200" y2="30" />
+        <line x1="200" y1="30" x2="260" y2="18" />
+        <line x1="260" y1="18" x2="320" y2="32" />
+        <line x1="320" y1="32" x2="440" y2="24" />
+      </svg>
     </div>
-    <div class="footer">
-      © Натальная карта Дианы · Космический одностраничный разбор
-    </div>
-  </section>
-</main>
+
+    <!-- Лист 6: Автор и контакты -->
+    <section id="credits">
+      <div class="section-inner">
+        <div class="section-label">Лист 6</div>
+        <h2>Натальную карту составил</h2>
+
+        <div class="grid-2">
+          <div>
+            <p>
+              Натальную карту Дианы составил астролог <strong>Максим Серебряков</strong>. Здесь собраны ключевые выводы,
+              которые можно использовать как ориентиры на ближайшие годы: для личного развития, выбора направлений роста и
+              более осознанного прохождения жизненных этапов.
+            </p>
+
+            <div class="pill">Астрологический разбор</div>
+            <div class="pill">Натальная карта</div>
+            <div class="pill">Личные ресурсы</div>
+
+            <div class="contact-block">
+              <div class="contact-item">
+                <div class="contact-label">Имя астролога</div>
+                <div class="contact-value">Максим Серебряков</div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-label">Instagram</div>
+                <div class="contact-value">
+                  <a href="https://instagram.com/astro_serebryakov" target="_blank" rel="noopener noreferrer">@astro_serebryakov</a>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-label">Контакты</div>
+                <div class="contact-value">
+                  Место для добавления телефона, почты или ссылок на мессенджеры
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="photo-placeholder">
+              <span>Место для фотографии или фирменного логотипа астролога</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Астрологический одностраничный сайт по натальной карте Дианы.</span>
+    <span class="footer-stars">✶ ✶ ✶</span>
+  </footer>
+
+  <script>
+    // плавный переход звёздами при смене разделов
+    (function () {
+      const body = document.body;
+      const nav = document.querySelector("header nav");
+      const navToggle = document.querySelector(".nav-toggle");
+      const links = document.querySelectorAll('header nav a[href^="#"]');
+
+      function closeNav() {
+        if (nav) nav.classList.remove("open");
+      }
+
+      function runStarTransition() {
+        body.classList.add("transitioning");
+        setTimeout(() => {
+          body.classList.remove("transitioning");
+        }, 900);
+      }
+
+      links.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          const href = link.getAttribute("href");
+          const target = href && document.querySelector(href);
+
+          if (target) {
+            e.preventDefault();
+            runStarTransition();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            closeNav();
+          }
+        });
+      });
+
+      if (navToggle) {
+        navToggle.addEventListener("click", () => {
+          if (nav) {
+            nav.classList.toggle("open");
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
