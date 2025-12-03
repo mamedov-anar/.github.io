@@ -25,21 +25,25 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  min-height: 100%;
+  /* фон перенесли сюда */
+  background: radial-gradient(circle at top, #0b102a 0, #030519 40%, #020313 100%);
+}
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #0b102a 0, #030519 40%, #020313 100%);
-      color: var(--text-main);
-      line-height: 1.6;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  /* фон убираем/делаем прозрачным */
+  background: transparent;
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
 
     /* базовый звездный фон */
     .stars,
